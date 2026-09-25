@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Вибір — картки</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#202020;background:#f4f0ea}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;justify-content:center}
+.app{width:min(100%,520px);padding:24px 18px 30px}
+.brand{font-size:14px;letter-spacing:.16em;text-transform:uppercase;text-align:center;margin:8px 0 5px}
+h1{text-align:center;font-size:28px;margin:0 0 4px;font-weight:600}
+.sub{text-align:center;color:#777;margin-bottom:22px}
+.counter{text-align:center;font-size:13px;color:#888;margin-bottom:10px}
+.card{background:#fff;border-radius:24px;min-height:390px;padding:32px 25px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 8px 30px #00000010;touch-action:pan-y}
+.label{text-align:center;text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:#9a8170;margin-bottom:22px}
+.question{text-align:center;font-size:27px;line-height:1.22;font-weight:500}
+.answer{margin-top:26px;padding-top:22px;border-top:1px solid #eee;text-align:center;font-size:17px;line-height:1.5;color:#555}
+.hidden{display:none}.buttons{display:flex;gap:10px;margin-top:16px}
+button{border:0;border-radius:14px;padding:14px 16px;font-size:16px;background:#fff;box-shadow:0 4px 16px #0000000d;cursor:pointer}
+.nav{display:flex;justify-content:space-between;flex:1}.nav button{width:48%}
+.answerBtn{width:100%;background:#252525;color:#fff}
+.hint{text-align:center;color:#999;font-size:12px;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="brand">Вибір</div>
+<h1>Що я привезла із собою?</h1>
+<div class="sub">Міграція · картки для самодослідження</div>
+<div class="counter" id="counter"></div>
+<div class="card" id="card">
+  <div class="label">Картка</div>
+  <div class="question" id="question"></div>
+  <div class="answer hidden" id="answer"></div>
+</div>
+<div class="buttons">
+  <button class="answerBtn" id="answerBtn">Відкрити відповідь</button>
+</div>
+<div class="buttons nav">
+  <button id="prev">← Назад</button>
+  <button id="next">Наступна →</button>
+</div>
+<div class="hint">Спробуй провести картку вліво або вправо</div>
+</div>
+<script>
+const cards=[
+["Що з минулого я продовжую повторювати?","Звичну реакцію, роль або спосіб діяти."],
+["Яке правило я привезла із собою?","Наприклад: «Я маю все робити сама»."],
+["Чого я навчилася завдяки переїзду?","Назви одну навичку, якої раніше в тебе не було."],
+["Що в мені змінилося після переїзду?","Поміть одну реальну зміну в собі."],
+["Що я досі намагаюся довести?","Кому саме і навіщо — теж важливо помітити."],
+["Який страх я забрала із собою?","Назви його без пояснення та виправдання."],
+["Що нового я дозволила собі після переїзду?","Навіть маленька зміна має значення."],
+["Що більше не працює у моєму новому житті?","Старе правило, роль, звичка або очікування."],
+["Що я хочу залишити в минулому?","Назви те, що більше не хочеш нести далі."],
+["Що я хочу створити тут?","Не «знайти», а саме створити у своєму новому житті."]
+];
+let i=0;
+const q=document.getElementById("question"),a=document.getElementById("answer"),c=document.getElementById("counter");
+function render(){q.textContent=cards[i][0];a.textContent=cards[i][1];a.classList.add("hidden");c.textContent=`${i+1} / ${cards.length}`}
+document.getElementById("answerBtn").onclick=()=>a.classList.toggle("hidden");
+document.getElementById("prev").onclick=()=>{i=(i-1+cards.length)%cards.length;render()};
+document.getElementById("next").onclick=()=>{i=(i+1)%cards.length;render()};
+let x=0;const card=document.getElementById("card");
+card.addEventListener("touchstart",e=>x=e.changedTouches[0].clientX,{passive:true});
+card.addEventListener("touchend",e=>{let d=e.changedTouches[0].clientX-x;if(Math.abs(d)>60){i=(i+(d<0?1:-1)+cards.length)%cards.length;render()}},{passive:true});
+render();
+</script>
+</body>
+</html>
